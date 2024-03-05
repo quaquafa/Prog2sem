@@ -2,20 +2,22 @@
 #include <stdio.h>
 #include <math.h>
 #include <locale.h>
-
 int main() {
 	int n = 0, prime;
-	scanf("%d", &n);
-	for (int i = 1; i <= n; i++) {
+	printf("All prime number under N\n");
+		printf("Enter a number: ");
+		scanf("%d", &n);
+		for (int i = 1; i <= n; i++) {
 			prime = 1;
-			for (int j = 2; j <= sqrt(i); j++) {
-				if (i % j == 0) {
+			for (int j = 1; j <= sqrt(i); j++) {
+				if (0 == (i / j) - ((float) i / j) && j != 1) {
 					prime = 0;
 					break;
 				}
 			}
-			if (prime == 1) {
+			if (prime == 1 && i != 1) {
 				printf("%d\t", i);
-			}
+			}	
 	}
+	return 0;
 }
