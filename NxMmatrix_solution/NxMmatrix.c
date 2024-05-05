@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define MAX_SIZE 1000
 struct matrix
 {
 	int ver, hor;
