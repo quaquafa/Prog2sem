@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
+#define MAX_SIZE 1000
 struct matrix
 {
 	int ver, hor;
@@ -8,19 +10,19 @@ struct matrix
 	float** matr_float;
 };
 typedef struct matrix matrix;
-float** init_matrix_float (int m, int n){ // initialization of float matrix 
+float** init_matrix_float (int m, int n){
 	matrix input_matr;
-	input_matr.ver = n; // number of rows
-	input_matr.hor = m; // number of columns
+	input_matr.ver = n;
+	input_matr.hor = m;
 	input_matr.matr_float = malloc(sizeof(float*) * input_matr.ver); 
 	for(int i = 0; i < n; i++)
 		input_matr.matr_float[i] = malloc(sizeof(float) * input_matr.hor);
 	return input_matr.matr_float;
 }	
-int** init_matrix (int m, int n){ // initialization of int matrix 
+int** init_matrix (int m, int n){
 	matrix input_matr;
-	input_matr.ver = n; // number of rows
-	input_matr.hor = m; // number of columns
+	input_matr.ver = n;
+	input_matr.hor = m;
 	input_matr.matr = malloc(sizeof(int*) * input_matr.ver); 
 	for(int i = 0; i < n; i++)
 		input_matr.matr[i] = malloc(sizeof(int) * input_matr.hor); // horizontal : m || vertical : n, a[n][m]
@@ -37,13 +39,6 @@ matrix summ_mart (matrix first, matrix second){
 	}
 	return summ;
 }
-/*
-	|a_11 a_12 ... |	|b_11 b_12 ...|	     |a_11 + b_11  a_12 + b_12 ....|
-	|... ... ..... |   + 	|... ... .....|  =   |.............................|
-	|... ... ..... |	|... ... .....|      |.............................|
-
-
-*/
 matrix comp_matr (matrix first, matrix second){
 	matrix comp;
 	comp.ver = first.ver;
@@ -58,14 +53,6 @@ matrix comp_matr (matrix first, matrix second){
 	}
 	return comp;
 }
-/*
-             n                                i                                 i
- 	|...............|	   |........ b_1i....|               |.................|
-	|...............|	 n |........ b_2i....|               |.................|
-j    -> |a_j1 a_j2 .....|     *    |.................|     =       j | ....... c_ji....|        c_ji += a_jk * b_ki, k < n
-        |...............|          |.................|               |.................|
-
-*/
 matrix init_min_matrix(matrix big_matrix, int less_hor, int less_ver){ // NxN -> (N-1)x(N-1)
 	matrix small_matrix;
 	small_matrix.matr = init_matrix(big_matrix.ver - 1, big_matrix.hor - 1);
@@ -88,16 +75,6 @@ matrix init_min_matrix(matrix big_matrix, int less_hor, int less_ver){ // NxN ->
 	}
 	return small_matrix;
 } 
-/*
-	
-	|a_11.......|.a_1i...|             |a_11.......a_1(i-1)....|
-	|...........|........|             |.......................|
-	|--------------------| ------>     |a_(j-1)1...a_(j-1)(i-1)|
-	|a_j1.......|.a_ji...|		   |.......................|
-	|...........|........|		  
-
-
-*/
 int det_matrix(matrix enter_matrix){
 	int det_value = 0;	
 if	(enter_matrix.hor == 1){
@@ -169,6 +146,7 @@ int matrix_from_file(matrix enter_matrix){
 	return 0;
 }
 void random_marix(matrix enter){
+	srand(time(NULL));
 	for(int j = 0; j < enter.ver; j++){
 		for(int i = 0; i < enter.hor; i++){
 			int a = rand();
@@ -217,8 +195,10 @@ void calculation_func(matrix first, matrix second){
 			printf("%d\n", det_matrix(first));
 			fprintf(result, "%d", det_matrix(first));
 		}
-	} else {
-		if (det_matrix(first) == 0 || first.hor != first.ver){
+	} else if (choose == 4){
+		if (first.hor != first.ver){
+			printf("Can't invert\n");
+		} else if(det_matrix(first) == 0){
 			printf("Can't invert\n");
 		} else {
 			float** invert = invert_matrix(first).matr_float;
